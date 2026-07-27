@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>今天吃点啥 - 自动配菜工具</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 主容器 -->
+    <div class="container">
+        
+        <!-- 标题区 -->
+        <header class="header">
+            <h1>🍳 今天吃点啥</h1>
+            <p class="subtitle">一键解决选择困难症</p>
+        </header>
+
+        <!-- 三卡展示区 -->
+        <div class="cards-container">
+            <!-- 卡片1：烹饪方式 -->
+            <div class="card" id="cardCook">
+                <div class="card-label">🔥 烹饪方式</div>
+                <div class="card-content" id="cookDisplay">❓</div>
+                <div class="card-tip" id="cookTip">点击下方按钮开始</div>
+            </div>
+
+            <!-- 卡片2：主料 -->
+            <div class="card" id="cardMain">
+                <div class="card-label">🥩 主料</div>
+                <div class="card-content" id="mainDisplay">❓</div>
+                <div class="card-tip">主要食材</div>
+            </div>
+
+            <!-- 卡片3：辅料 -->
+            <div class="card" id="cardVeg">
+                <div class="card-label">🌿 辅料</div>
+                <div class="card-content" id="vegDisplay">❓</div>
+                <div class="card-tip">搭配蔬菜</div>
+            </div>
+        </div>
+
+        <!-- 完整菜名展示 -->
+        <div class="dish-name" id="dishName">
+            👆 点击下方按钮生成菜品
+        </div>
+
+        <!-- 按钮区域 -->
+        <div class="button-area">
+            <button class="btn-generate" id="generateBtn">
+                🎰 配菜！
+            </button>
+            <button class="btn-reset" id="resetBtn">
+                🔄 重新摇一摇
+            </button>
+        </div>
+
+        <!-- 黑暗料理提示 -->
+        <div class="dark-tip" id="darkTip" style="display: none;">
+            💀 黑暗料理彩蛋触发！
+        </div>
+
+        <!-- 底部信息 -->
+        <footer class="footer">
+            <p>🍽️ 随机搭配，快乐烹饪</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
