@@ -7,7 +7,7 @@ const foodDB = [
     // 荤菜类
     '五花肉', '鸡腿肉', '牛肉片', '羊肉片', '虾仁', '鱿鱼须',
     '排骨', '鸡胸肉', '鸭肉', '鱼肉片', '猪里脊', '牛腩', 
-    '鸡翅中', '肥牛卷', '猪肝', '虾滑', '猪大肠',  // ← 新增
+    '鸡翅中', '肥牛卷', '猪肝', '虾滑', '猪大肠',
     // 素菜类
     '土豆', '茄子', '西红柿', '西兰花', '青椒', '洋葱', 
     '胡萝卜', '白菜', '菠菜', '豆芽', '蘑菇', '金针菇',
@@ -44,7 +44,7 @@ const cookDB = [
     { method: '干煸', emoji: '🌶️', tip: '麻辣干香' },
     { method: '水煮', emoji: '🥘', tip: '鲜嫩滑爽' },
     { method: '酱爆', emoji: '🧄', tip: '酱香浓郁' },
-    { method: '刺身', emoji: '🍣', tip: '生食原味' }  // ← 新增
+    { method: '刺身', emoji: '🍣', tip: '生食原味' }
 ];
 
 // ============================================
@@ -371,7 +371,7 @@ resetBtn.addEventListener('click', resetDish);
 console.log('🍽️ 配菜工具已就绪！点击"配菜！"按钮开始随机搭配。');
 
 // ============================================
-// 分享功能
+// 分享功能 - 直接保存到相册/下载
 // ============================================
 
 const shareBtn = document.getElementById('shareBtn');
@@ -393,12 +393,17 @@ function generateQR() {
     });
 }
 
-// 分享截图
+// 分享截图 - 直接保存到相册/下载
 async function shareScreenshot() {
     // 1. 生成二维码
     generateQR();
     // 2. 显示二维码容器（截图时可见）
     qrContainer.style.display = 'block';
+
+    // 保存按钮原始文字
+    const originalText = shareBtn.textContent;
+    shareBtn.textContent = '⏳ 生成中...';
+    shareBtn.disabled = true;
 
     try {
         // 3. 使用 html2canvas 截取整个页面（包含二维码）
@@ -416,28 +421,36 @@ async function shareScreenshot() {
         // 5. 将 canvas 转为图片 blob
         const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
 
-        // 6. 尝试使用 Web Share API 分享（移动端支持）
-        if (navigator.share) {
-            const file = new File([blob], '今天吃点啥.png', { type: 'image/png' });
-            await navigator.share({
-                title: '今天吃点啥',
-                text: '看看我今天随机到的美食！🍳',
-                files: [file]
-            });
-        } else {
-            // 降级方案：直接下载图片
-            const link = document.createElement('a');
-            link.download = '今天吃点啥.png';
-            link.href = URL.createObjectURL(blob);
-            link.click();
+        // 6. 创建下载链接
+        const link = document.createElement('a');
+        link.download = '今天吃点啥.png';
+        link.href = URL.createObjectURL(blob);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        // 释放内存
+        setTimeout(() => {
             URL.revokeObjectURL(link.href);
-        }
+        }, 1000);
+
+        // 更新按钮状态
+        shareBtn.textContent = '✅ 已保存！';
+        setTimeout(() => {
+            shareBtn.textContent = originalText;
+            shareBtn.disabled = false;
+        }, 2000);
 
     } catch (error) {
         console.error('截图或分享失败:', error);
         // 出错时确保二维码隐藏
         qrContainer.style.display = 'none';
-        alert('分享失败，请重试或截图保存。');
+        shareBtn.textContent = '❌ 失败';
+        setTimeout(() => {
+            shareBtn.textContent = '📤 分享今天的美食';
+            shareBtn.disabled = false;
+        }, 2000);
+        alert('截图生成失败，请重试。');
     }
 }
 
