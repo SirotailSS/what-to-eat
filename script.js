@@ -369,3 +369,77 @@ resetBtn.addEventListener('click', resetDish);
 
 // 8. 页面加载时显示默认状态
 console.log('🍽️ 配菜工具已就绪！点击"配菜！"按钮开始随机搭配。');
+
+// ============================================
+// 分享功能
+// ============================================
+
+const shareBtn = document.getElementById('shareBtn');
+const qrContainer = document.getElementById('qrcode-container');
+const qrElement = document.getElementById('qrcode');
+
+// 生成二维码（隐藏状态）
+function generateQR() {
+    // 清空之前的二维码
+    qrElement.innerHTML = '';
+    // 生成新的二维码，尺寸适合截图
+    new QRCode(qrElement, {
+        text: window.location.href,
+        width: 120,
+        height: 120,
+        colorDark: '#000000',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.H
+    });
+}
+
+// 分享截图
+async function shareScreenshot() {
+    // 1. 生成二维码
+    generateQR();
+    // 2. 显示二维码容器（截图时可见）
+    qrContainer.style.display = 'block';
+
+    try {
+        // 3. 使用 html2canvas 截取整个页面（包含二维码）
+        const canvas = await html2canvas(document.body, {
+            scale: 2,               // 高清输出
+            useCORS: true,
+            allowTaint: false,
+            backgroundColor: '#ffffff',
+            logging: false
+        });
+
+        // 4. 隐藏二维码（避免一直显示）
+        qrContainer.style.display = 'none';
+
+        // 5. 将 canvas 转为图片 blob
+        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+
+        // 6. 尝试使用 Web Share API 分享（移动端支持）
+        if (navigator.share) {
+            const file = new File([blob], '今天吃点啥.png', { type: 'image/png' });
+            await navigator.share({
+                title: '今天吃点啥',
+                text: '看看我今天随机到的美食！🍳',
+                files: [file]
+            });
+        } else {
+            // 降级方案：直接下载图片
+            const link = document.createElement('a');
+            link.download = '今天吃点啥.png';
+            link.href = URL.createObjectURL(blob);
+            link.click();
+            URL.revokeObjectURL(link.href);
+        }
+
+    } catch (error) {
+        console.error('截图或分享失败:', error);
+        // 出错时确保二维码隐藏
+        qrContainer.style.display = 'none';
+        alert('分享失败，请重试或截图保存。');
+    }
+}
+
+// 绑定分享按钮点击事件
+shareBtn.addEventListener('click', shareScreenshot);

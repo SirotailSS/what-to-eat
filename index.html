@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>今天吃点啥 - 自动配菜工具</title>
     <link rel="stylesheet" href="style.css">
+    <!-- 引入 html2canvas -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <!-- 引入 qrcode.js -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 </head>
 <body>
     <!-- 主容器 -->
@@ -45,6 +49,11 @@
             👆 点击下方按钮生成菜品
         </div>
 
+        <div id="qrcode-container" style="display: none; position: fixed; bottom: 20px; left: 20px; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 9999;">
+            <div id="qrcode"></div>
+            <p style="margin: 5px 0 0; font-size: 12px; text-align: center; color: #333;">扫一扫，立即体验</p>
+        </div>
+
         <!-- 按钮区域 -->
         <div class="button-area">
             <button class="btn-generate" id="generateBtn">
@@ -52,6 +61,9 @@
             </button>
             <button class="btn-reset" id="resetBtn">
                 🔄 重新摇一摇
+            </button>
+            <button class="btn-share" id="shareBtn">
+                📤 分享今天的美食
             </button>
         </div>
 
@@ -62,7 +74,7 @@
 
         <!-- 底部信息 -->
         <footer class="footer">
-            <p>🍽️ 随机搭配，快乐烹饪</p>
+            <p class="subtitle"> Copyright Sirotail @ 2026</p>
         </footer>
     </div>
 
