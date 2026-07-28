@@ -284,9 +284,11 @@ function resetDish() {
     dishName.classList.remove('dark');
     darkTip.style.display = 'none';
     generateBtn.disabled = false;
-    // 移除分享预览（如果有）
-    const preview = document.getElementById('sharePreview');
-    if (preview) preview.remove();
+    // 关闭分享浮层（如果有）
+    closeShareOverlay();
+    // 重置分享按钮
+    shareBtn.textContent = '📤 分享今天的美食';
+    shareBtn.disabled = false;
 }
 
 generateBtn.addEventListener('click', rollDish);
@@ -295,16 +297,16 @@ resetBtn.addEventListener('click', resetDish);
 console.log('🍽️ 配菜工具已就绪！点击"配菜！"按钮开始随机搭配。');
 
 // ============================================
-// 分享功能 - 支持微信长按保存
+// 分享功能 - 全屏浮层长按保存
 // ============================================
 
 const shareBtn = document.getElementById('shareBtn');
 const qrContainer = document.getElementById('qrcode-container');
 const qrElement = document.getElementById('qrcode');
 
-// 检测是否为微信内置浏览器
-function isWechatBrowser() {
-    return /MicroMessenger/i.test(navigator.userAgent);
+// 检测是否为移动端
+function isMobileDevice() {
+    return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 }
 
 function generateQR() {
@@ -319,8 +321,159 @@ function generateQR() {
     });
 }
 
+// 关闭分享浮层
+function closeShareOverlay() {
+    const overlay = document.getElementById('shareOverlay');
+    if (overlay) {
+        overlay.remove();
+    }
+    // 恢复页面滚动
+    document.body.style.overflow = '';
+}
+
+// 显示全屏浮层（移动端长按保存）
+function showShareOverlay(canvas) {
+    // 移除旧的浮层
+    closeShareOverlay();
+
+    // 创建全屏浮层
+    const overlay = document.createElement('div');
+    overlay.id = 'shareOverlay';
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 99999;
+        padding: 20px;
+        animation: fadeInOverlay 0.3s ease;
+    `;
+
+    // 添加淡入动画
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes fadeInOverlay {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes scaleIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+    `;
+    overlay.appendChild(style);
+
+    // 提示文字
+    const tip = document.createElement('p');
+    tip.textContent = '👆 长按图片，选择"保存到相册"';
+    tip.style.cssText = `
+        color: #fff;
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    `;
+    overlay.appendChild(tip);
+
+    // 图片容器（带圆角阴影）
+    const imgWrapper = document.createElement('div');
+    imgWrapper.style.cssText = `
+        max-width: 500px;
+        width: 100%;
+        border-radius: 16px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        overflow: hidden;
+        animation: scaleIn 0.4s ease;
+        background: #fff;
+        padding: 4px;
+    `;
+    
+    const img = document.createElement('img');
+    img.src = canvas.toDataURL('image/png');
+    img.style.cssText = `
+        width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 12px;
+    `;
+    imgWrapper.appendChild(img);
+    overlay.appendChild(imgWrapper);
+
+    // 关闭按钮（右上角）
+    const closeBtn = document.createElement('button');
+    closeBtn.textContent = '✕';
+    closeBtn.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        width: 44px;
+        height: 44px;
+        border: none;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        color: #fff;
+        font-size: 24px;
+        cursor: pointer;
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        transition: background 0.2s;
+        z-index: 100000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    `;
+    closeBtn.onmouseover = () => { closeBtn.style.background = 'rgba(255,255,255,0.3)'; };
+    closeBtn.onmouseout = () => { closeBtn.style.background = 'rgba(255,255,255,0.2)'; };
+    closeBtn.onclick = closeShareOverlay;
+    overlay.appendChild(closeBtn);
+
+    // 点击背景也可以关闭
+    overlay.onclick = function(e) {
+        if (e.target === overlay) {
+            closeShareOverlay();
+        }
+    };
+
+    document.body.appendChild(overlay);
+    // 禁止页面滚动
+    document.body.style.overflow = 'hidden';
+
+    // 更新按钮状态
+    shareBtn.textContent = '📤 已打开预览';
+    shareBtn.disabled = false;
+
+    // 20秒后自动关闭
+    setTimeout(() => {
+        closeShareOverlay();
+        shareBtn.textContent = '📤 分享今天的美食';
+    }, 30000);
+}
+
+// 下载图片（电脑端）
+function downloadImage(canvas) {
+    canvas.toBlob(function(blob) {
+        const link = document.createElement('a');
+        link.download = '今天吃点啥.png';
+        link.href = URL.createObjectURL(blob);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        setTimeout(() => {
+            URL.revokeObjectURL(link.href);
+        }, 1000);
+    }, 'image/png');
+}
+
 async function shareScreenshot() {
-    const isWechat = isWechatBrowser();
+    const isMobile = isMobileDevice();
     const originalText = shareBtn.textContent;
     
     // 生成二维码并显示
@@ -341,67 +494,16 @@ async function shareScreenshot() {
 
         qrContainer.style.display = 'none';
 
-        // ===== 微信浏览器：显示图片引导长按保存 =====
-        if (isWechat) {
-            // 移除旧的预览
-            const oldPreview = document.getElementById('sharePreview');
-            if (oldPreview) oldPreview.remove();
-
-            const img = document.createElement('img');
-            img.src = canvas.toDataURL('image/png');
-            img.style.width = '100%';
-            img.style.maxWidth = '500px';
-            img.style.borderRadius = '12px';
-            img.style.boxShadow = '0 8px 30px rgba(0,0,0,0.3)';
-            img.style.margin = '10px auto';
-            img.style.display = 'block';
-            img.style.border = '3px solid #fff';
-            img.style.background = '#fff';
-
-            const shareContainer = document.createElement('div');
-            shareContainer.id = 'sharePreview';
-            shareContainer.style.cssText = `
-                text-align: center;
-                padding: 15px;
-                background: rgba(255,255,255,0.15);
-                border-radius: 16px;
-                margin: 10px 0;
-                backdrop-filter: blur(10px);
-            `;
-            shareContainer.innerHTML = `
-                <p style="color:#fff;font-size:16px;margin-bottom:10px;">👆 长按图片，选择"保存到相册"</p>
-            `;
-            shareContainer.appendChild(img);
-            
-            // 插入到 dishName 后面
-            dishName.parentNode.insertBefore(shareContainer, dishName.nextSibling);
-
-            shareBtn.textContent = '📤 长按图片保存';
-            shareBtn.disabled = false;
-
-            // 15秒后自动移除预览
-            setTimeout(() => {
-                const preview = document.getElementById('sharePreview');
-                if (preview) preview.remove();
-                shareBtn.textContent = '📤 分享今天的美食';
-            }, 20000);
-            
+        // ===== 移动端：全屏浮层显示，引导长按保存 =====
+        if (isMobile) {
+            showShareOverlay(canvas);
             return;
         }
 
-        // ===== 非微信浏览器：直接下载 =====
-        const link = document.createElement('a');
-        link.download = '今天吃点啥.png';
-        link.href = URL.createObjectURL(await new Promise(resolve => canvas.toBlob(resolve, 'image/png')));
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        // ===== 电脑端：直接下载 =====
+        downloadImage(canvas);
 
-        setTimeout(() => {
-            URL.revokeObjectURL(link.href);
-        }, 1000);
-
-        shareBtn.textContent = '✅ 已保存！';
+        shareBtn.textContent = '✅ 已下载！';
         setTimeout(() => {
             shareBtn.textContent = originalText;
             shareBtn.disabled = false;
