@@ -297,52 +297,28 @@ resetBtn.addEventListener('click', resetDish);
 console.log('🍽️ 配菜工具已就绪！点击"配菜！"按钮开始随机搭配。');
 
 // ============================================
-// 分享功能 - 全屏浮层长按保存（二维码放在浮层内）
+// 分享功能 - 二维码嵌入截图 + 全屏浮层
 // ============================================
 
 const shareBtn = document.getElementById('shareBtn');
+const qrContainer = document.getElementById('qrForScreenshot');
+const qrElement = document.getElementById('qrcode');
 
 // 检测是否为移动端
 function isMobileDevice() {
     return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 }
 
-// 生成二维码（返回 canvas 或 data URL）
-function generateQRDataURL(text, size) {
-    return new Promise((resolve) => {
-        // 创建一个临时容器
-        const container = document.createElement('div');
-        container.style.cssText = 'position: absolute; left: -9999px; top: -9999px;';
-        document.body.appendChild(container);
-        
-        const qrDiv = document.createElement('div');
-        container.appendChild(qrDiv);
-        
-        new QRCode(qrDiv, {
-            text: text,
-            width: size,
-            height: size,
-            colorDark: '#000000',
-            colorLight: '#ffffff',
-            correctLevel: QRCode.CorrectLevel.H
-        });
-        
-        // 等待 QRCode 渲染完成
-        setTimeout(() => {
-            const canvas = qrDiv.querySelector('canvas');
-            if (canvas) {
-                resolve(canvas.toDataURL('image/png'));
-            } else {
-                // 降级方案：用 img 标签
-                const img = qrDiv.querySelector('img');
-                if (img) {
-                    resolve(img.src);
-                } else {
-                    resolve(null);
-                }
-            }
-            container.remove();
-        }, 100);
+// 生成二维码（直接渲染到页面的隐藏容器中）
+function generateQR() {
+    qrElement.innerHTML = '';
+    new QRCode(qrElement, {
+        text: window.location.href,
+        width: 100,
+        height: 100,
+        colorDark: '#000000',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.H
     });
 }
 
@@ -356,12 +332,9 @@ function closeShareOverlay() {
 }
 
 // 显示全屏浮层（移动端长按保存）
-async function showShareOverlay(canvas) {
+function showShareOverlay(imageDataUrl) {
     // 移除旧的浮层
     closeShareOverlay();
-
-    // 生成二维码（80px 小尺寸）
-    const qrDataUrl = await generateQRDataURL(window.location.href, 80);
 
     // 创建全屏浮层
     const overlay = document.createElement('div');
@@ -398,7 +371,7 @@ async function showShareOverlay(canvas) {
     `;
     overlay.appendChild(style);
 
-    // ---- 图片主体 ----
+    // ---- 图片主体（已经包含二维码） ----
     const imgWrapper = document.createElement('div');
     imgWrapper.style.cssText = `
         max-width: 500px;
@@ -409,11 +382,10 @@ async function showShareOverlay(canvas) {
         animation: scaleIn 0.4s ease;
         background: #fff;
         padding: 4px;
-        position: relative;
     `;
     
     const img = document.createElement('img');
-    img.src = canvas.toDataURL('image/png');
+    img.src = imageDataUrl;
     img.style.cssText = `
         width: 100%;
         height: auto;
@@ -422,41 +394,6 @@ async function showShareOverlay(canvas) {
     `;
     imgWrapper.appendChild(img);
     overlay.appendChild(imgWrapper);
-
-    // ---- 二维码区域（在图片下方，不遮挡图片） ----
-    const qrWrapper = document.createElement('div');
-    qrWrapper.style.cssText = `
-        margin-top: 16px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        animation: scaleIn 0.5s ease;
-    `;
-
-    if (qrDataUrl) {
-        const qrImg = document.createElement('img');
-        qrImg.src = qrDataUrl;
-        qrImg.style.cssText = `
-            width: 80px;
-            height: 80px;
-            border-radius: 8px;
-            background: #fff;
-            padding: 6px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        `;
-        qrWrapper.appendChild(qrImg);
-    }
-
-    const qrLabel = document.createElement('p');
-    qrLabel.textContent = '扫一扫，立即体验';
-    qrLabel.style.cssText = `
-        color: rgba(255,255,255,0.7);
-        font-size: 12px;
-        margin-top: 6px;
-        letter-spacing: 1px;
-    `;
-    qrWrapper.appendChild(qrLabel);
-    overlay.appendChild(qrWrapper);
 
     // ---- 提示文字 ----
     const tip = document.createElement('p');
@@ -537,10 +474,17 @@ async function shareScreenshot() {
     const isMobile = isMobileDevice();
     const originalText = shareBtn.textContent;
     
+    // 1. 生成二维码（渲染到隐藏容器）
+    generateQR();
+    
+    // 2. 显示二维码容器（截图时会出现在左下角）
+    qrContainer.style.display = 'block';
+    
     shareBtn.textContent = '⏳ 生成中...';
     shareBtn.disabled = true;
 
     try {
+        // 3. 截图（二维码已经成为页面的一部分）
         const canvas = await html2canvas(document.body, {
             scale: 2,
             useCORS: true,
@@ -549,9 +493,15 @@ async function shareScreenshot() {
             logging: false
         });
 
+        // 4. 隐藏二维码容器
+        qrContainer.style.display = 'none';
+
+        // 5. 获取图片数据
+        const imageDataUrl = canvas.toDataURL('image/png');
+
         // ===== 移动端：全屏浮层显示，引导长按保存 =====
         if (isMobile) {
-            await showShareOverlay(canvas);
+            showShareOverlay(imageDataUrl);
             return;
         }
 
@@ -566,6 +516,7 @@ async function shareScreenshot() {
 
     } catch (error) {
         console.error('截图失败:', error);
+        qrContainer.style.display = 'none';
         shareBtn.textContent = '❌ 失败';
         setTimeout(() => {
             shareBtn.textContent = '📤 分享今天的美食';

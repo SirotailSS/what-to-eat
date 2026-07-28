@@ -49,6 +49,12 @@
             👆 点击下方按钮生成菜品
         </div>
 
+        <!-- ===== 新增：截图专用二维码（默认隐藏，截图时显示） ===== -->
+        <div id="qrForScreenshot" style="display: none; position: fixed; bottom: 30px; left: 30px; background: white; padding: 12px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); z-index: 9999;">
+            <div id="qrcode"></div>
+            <p style="margin: 6px 0 0; font-size: 12px; text-align: center; color: #555; font-weight: 500;">扫一扫，立即体验</p>
+        </div>
+
         <!-- 按钮区域 -->
         <div class="button-area">
             <button class="btn-generate" id="generateBtn">
