@@ -386,3 +386,114 @@ body {
         padding: 14px 25px;
     }
 }
+
+/* ============================================
+   二维码区域（页面布局的一部分）
+   ============================================ */
+.qr-section {
+    margin: 20px 0 10px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    min-height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.qr-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.qr-placeholder .qr-icon {
+    font-size: 28px;
+}
+
+.qr-placeholder .qr-text {
+    font-size: 13px;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+}
+
+.qr-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    animation: fadeInQR 0.4s ease;
+}
+
+@keyframes fadeInQR {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.qr-wrapper #qrcode {
+    background: #fff;
+    padding: 8px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.qr-wrapper #qrcode canvas {
+    display: block;
+    width: 80px;
+    height: 80px;
+}
+
+.qr-wrapper .qr-label {
+    margin: 0;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 400;
+    letter-spacing: 0.5px;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .qr-section {
+        min-height: 60px;
+        padding: 12px;
+        margin: 15px 0 8px;
+    }
+    
+    .qr-placeholder .qr-icon {
+        font-size: 22px;
+    }
+    
+    .qr-placeholder .qr-text {
+        font-size: 11px;
+    }
+    
+    .qr-wrapper #qrcode canvas {
+        width: 70px;
+        height: 70px;
+    }
+}
+
+@media (max-width: 480px) {
+    .qr-section {
+        min-height: 50px;
+        padding: 10px;
+        margin: 12px 0 6px;
+    }
+    
+    .qr-wrapper #qrcode canvas {
+        width: 60px;
+        height: 60px;
+    }
+}

@@ -289,6 +289,8 @@ function resetDish() {
     // 重置分享按钮
     shareBtn.textContent = '📤 分享今天的美食';
     shareBtn.disabled = false;
+    // 重置二维码区域
+    resetQRCode();
 }
 
 generateBtn.addEventListener('click', rollDish);
@@ -297,11 +299,13 @@ resetBtn.addEventListener('click', resetDish);
 console.log('🍽️ 配菜工具已就绪！点击"配菜！"按钮开始随机搭配。');
 
 // ============================================
-// 分享功能 - 二维码嵌入截图 + 全屏浮层
+// 分享功能 - 二维码嵌入页面布局
 // ============================================
 
 const shareBtn = document.getElementById('shareBtn');
-const qrContainer = document.getElementById('qrForScreenshot');
+const qrSection = document.getElementById('qrSection');
+const qrPlaceholder = document.getElementById('qrPlaceholder');
+const qrWrapper = document.getElementById('qrWrapper');
 const qrElement = document.getElementById('qrcode');
 
 // 检测是否为移动端
@@ -309,7 +313,14 @@ function isMobileDevice() {
     return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 }
 
-// 生成二维码（直接渲染到页面的隐藏容器中）
+// 重置二维码区域
+function resetQRCode() {
+    qrWrapper.style.display = 'none';
+    qrPlaceholder.style.display = 'flex';
+    qrElement.innerHTML = '';
+}
+
+// 生成二维码（显示在页面布局中）
 function generateQR() {
     qrElement.innerHTML = '';
     new QRCode(qrElement, {
@@ -320,6 +331,13 @@ function generateQR() {
         colorLight: '#ffffff',
         correctLevel: QRCode.CorrectLevel.H
     });
+}
+
+// 显示二维码（替换占位符）
+function showQRCode() {
+    generateQR();
+    qrPlaceholder.style.display = 'none';
+    qrWrapper.style.display = 'flex';
 }
 
 // 关闭分享浮层
@@ -333,10 +351,8 @@ function closeShareOverlay() {
 
 // 显示全屏浮层（移动端长按保存）
 function showShareOverlay(imageDataUrl) {
-    // 移除旧的浮层
     closeShareOverlay();
 
-    // 创建全屏浮层
     const overlay = document.createElement('div');
     overlay.id = 'shareOverlay';
     overlay.style.cssText = `
@@ -357,7 +373,6 @@ function showShareOverlay(imageDataUrl) {
         animation: fadeInOverlay 0.3s ease;
     `;
 
-    // 添加淡入动画
     const style = document.createElement('style');
     style.textContent = `
         @keyframes fadeInOverlay {
@@ -371,7 +386,6 @@ function showShareOverlay(imageDataUrl) {
     `;
     overlay.appendChild(style);
 
-    // ---- 图片主体（已经包含二维码） ----
     const imgWrapper = document.createElement('div');
     imgWrapper.style.cssText = `
         max-width: 500px;
@@ -395,7 +409,6 @@ function showShareOverlay(imageDataUrl) {
     imgWrapper.appendChild(img);
     overlay.appendChild(imgWrapper);
 
-    // ---- 提示文字 ----
     const tip = document.createElement('p');
     tip.textContent = '👆 长按图片，选择"保存到相册"';
     tip.style.cssText = `
@@ -407,7 +420,6 @@ function showShareOverlay(imageDataUrl) {
     `;
     overlay.appendChild(tip);
 
-    // ---- 关闭按钮（右上角） ----
     const closeBtn = document.createElement('button');
     closeBtn.textContent = '✕';
     closeBtn.style.cssText = `
@@ -435,7 +447,6 @@ function showShareOverlay(imageDataUrl) {
     closeBtn.onclick = closeShareOverlay;
     overlay.appendChild(closeBtn);
 
-    // 点击背景关闭
     overlay.onclick = function(e) {
         if (e.target === overlay) {
             closeShareOverlay();
@@ -448,7 +459,6 @@ function showShareOverlay(imageDataUrl) {
     shareBtn.textContent = '📤 已打开预览';
     shareBtn.disabled = false;
 
-    // 30秒后自动关闭
     setTimeout(() => {
         closeShareOverlay();
         shareBtn.textContent = '📤 分享今天的美食';
@@ -474,17 +484,14 @@ async function shareScreenshot() {
     const isMobile = isMobileDevice();
     const originalText = shareBtn.textContent;
     
-    // 1. 生成二维码（渲染到隐藏容器）
-    generateQR();
-    
-    // 2. 显示二维码容器（截图时会出现在左下角）
-    qrContainer.style.display = 'block';
+    // 1. 显示二维码（在页面布局中）
+    showQRCode();
     
     shareBtn.textContent = '⏳ 生成中...';
     shareBtn.disabled = true;
 
     try {
-        // 3. 截图（二维码已经成为页面的一部分）
+        // 2. 截图（二维码已在页面中）
         const canvas = await html2canvas(document.body, {
             scale: 2,
             useCORS: true,
@@ -493,10 +500,7 @@ async function shareScreenshot() {
             logging: false
         });
 
-        // 4. 隐藏二维码容器
-        qrContainer.style.display = 'none';
-
-        // 5. 获取图片数据
+        // 3. 获取图片数据
         const imageDataUrl = canvas.toDataURL('image/png');
 
         // ===== 移动端：全屏浮层显示，引导长按保存 =====
@@ -516,7 +520,6 @@ async function shareScreenshot() {
 
     } catch (error) {
         console.error('截图失败:', error);
-        qrContainer.style.display = 'none';
         shareBtn.textContent = '❌ 失败';
         setTimeout(() => {
             shareBtn.textContent = '📤 分享今天的美食';

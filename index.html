@@ -49,12 +49,6 @@
             👆 点击下方按钮生成菜品
         </div>
 
-        <!-- ===== 新增：截图专用二维码（默认隐藏，截图时显示） ===== -->
-        <div id="qrForScreenshot" style="display: none; position: fixed; bottom: 30px; left: 30px; background: white; padding: 12px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); z-index: 9999;">
-            <div id="qrcode"></div>
-            <p style="margin: 6px 0 0; font-size: 12px; text-align: center; color: #555; font-weight: 500;">扫一扫，立即体验</p>
-        </div>
-
         <!-- 按钮区域 -->
         <div class="button-area">
             <button class="btn-generate" id="generateBtn">
@@ -73,9 +67,21 @@
             💀 黑暗料理彩蛋触发！
         </div>
 
+        <!-- ===== 【新增】二维码区域（页面布局的一部分） ===== -->
+        <div class="qr-section" id="qrSection">
+            <div class="qr-placeholder" id="qrPlaceholder">
+                <span class="qr-icon">📱</span>
+                <span class="qr-text">分享后自动生成二维码</span>
+            </div>
+            <div class="qr-wrapper" id="qrWrapper" style="display: none;">
+                <div id="qrcode"></div>
+                <p class="qr-label">扫一扫，立即体验</p>
+            </div>
+        </div>
+
         <!-- 底部信息 -->
         <footer class="footer">
-            <p class="subtitle"> Copyright Sirotail @ 2026</p>
+            <p class="subtitle">Copyright Sirotail @ 2026</p>
         </footer>
     </div>
 
