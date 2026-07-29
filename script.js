@@ -96,48 +96,35 @@ const foodDB = [
 // ============================================
 
 const cookDB = [
-    // 炒类
-    { method: '炒', emoji: '🔥', category: '炒类', tip: '大火快熟', format: 'a+b' },
-    { method: '爆炒', emoji: '🔥', category: '炒类', tip: '大火快炒', format: 'a+b' },
+    // ===== 高频：炒、蒸、煮、炖、烧、拌（权重4） =====
+    { method: '炒', emoji: '🔥', category: '炒类', tip: '大火快熟', format: 'a+b', weight: 4 },
+    { method: '蒸', emoji: '♨️', category: '蒸类', tip: '原汁原味', format: 'a+b', weight: 4 },
+    { method: '煮', emoji: '🥘', category: '煮类', tip: '鲜嫩入味', format: 'a+b', weight: 4 },
+    { method: '炖', emoji: '🍲', category: '炖类', tip: '软烂入味', format: 'a+b', weight: 4 },
+    { method: '烧', emoji: '🧄', category: '烧类', tip: '酱香浓郁', format: 'a+b', weight: 4 },
+    { method: '拌', emoji: '🥗', category: '拌类', tip: '清爽开胃', format: 'a+b', weight: 4 },
     
-    // 炸类
-    { method: '炸', emoji: '🍗', category: '炸类', tip: '外酥里嫩', format: 'verb+main' },
-    { method: '酥炸', emoji: '🍗', category: '炸类', tip: '酥脆可口', format: 'verb+main' },
+    // ===== 中频：煎、炸、烤、汤（权重2） =====
+    { method: '煎', emoji: '🍳', category: '煎类', tip: '两面金黄', format: 'verb+main', weight: 2 },
+    { method: '炸', emoji: '🍗', category: '炸类', tip: '外酥里嫩', format: 'verb+main', weight: 2 },
+    { method: '烤', emoji: '🥩', category: '烤类', tip: '焦香四溢', format: 'verb+main', weight: 2 },
+    { method: '汤', emoji: '🥣', category: '汤类', tip: '营养暖胃', format: 'a+b+soup', weight: 2 },
     
-    // 蒸类
-    { method: '蒸', emoji: '♨️', category: '蒸类', tip: '原汁原味', format: 'a+b' },
-    { method: '清蒸', emoji: '♨️', category: '蒸类', tip: '清淡鲜美', format: 'a+b' },
-    
-    // 煮类
-    { method: '煮', emoji: '🥘', category: '煮类', tip: '鲜嫩入味', format: 'a+b' },
-    { method: '水煮', emoji: '🥘', category: '煮类', tip: '麻辣鲜香', format: 'a+b' },
-    
-    // 炖类
-    { method: '炖', emoji: '🍲', category: '炖类', tip: '软烂入味', format: 'a+b' },
-    { method: '煲', emoji: '🍲', category: '炖类', tip: '慢火煲制', format: 'a+b' },
-    { method: '焖', emoji: '🍲', category: '炖类', tip: '酥烂入味', format: 'a+b' },
-    
-    // 烧类
-    { method: '烧', emoji: '🧄', category: '烧类', tip: '酱香浓郁', format: 'a+b' },
-    { method: '红烧', emoji: '🧄', category: '烧类', tip: '色泽红亮', format: 'a+b' },
-    { method: '干烧', emoji: '🧄', category: '烧类', tip: '干香入味', format: 'a+b' },
-    
-    // 烤类
-    { method: '烤', emoji: '🥩', category: '烤类', tip: '焦香四溢', format: 'verb+main' },
-    { method: '焗', emoji: '🥩', category: '烤类', tip: '奶香浓郁', format: 'verb+main' },
-    
-    // 拌类
-    { method: '拌', emoji: '🥗', category: '拌类', tip: '清爽开胃', format: 'a+b' },
-    { method: '凉拌', emoji: '🥗', category: '拌类', tip: '清凉爽口', format: 'a+b' },
-    
-    // 煎类
-    { method: '煎', emoji: '🍳', category: '煎类', tip: '两面金黄', format: 'verb+main' },
-    { method: '香煎', emoji: '🍳', category: '煎类', tip: '香气扑鼻', format: 'verb+main' },
-    
-    // 汤类
-    { method: '汤', emoji: '🥣', category: '汤类', tip: '营养暖胃', format: 'a+b+soup' },
-    { method: '羹', emoji: '🥣', category: '汤类', tip: '浓稠顺滑', format: 'a+b+soup' }
+    // ===== 低频：各种修饰词（权重1） =====
+    { method: '爆炒', emoji: '🔥', category: '炒类', tip: '大火快炒', format: 'a+b', weight: 1 },
+    { method: '清蒸', emoji: '♨️', category: '蒸类', tip: '清淡鲜美', format: 'a+b', weight: 1 },
+    { method: '水煮', emoji: '🥘', category: '煮类', tip: '麻辣鲜香', format: 'a+b', weight: 1 },
+    { method: '红烧', emoji: '🧄', category: '烧类', tip: '色泽红亮', format: 'a+b', weight: 1 },
+    { method: '干烧', emoji: '🧄', category: '烧类', tip: '干香入味', format: 'a+b', weight: 1 },
+    { method: '酥炸', emoji: '🍗', category: '炸类', tip: '酥脆可口', format: 'verb+main', weight: 1 },
+    { method: '香煎', emoji: '🍳', category: '煎类', tip: '香气扑鼻', format: 'verb+main', weight: 1 },
+    { method: '煲', emoji: '🍲', category: '炖类', tip: '慢火煲制', format: 'a+b', weight: 1 },
+    { method: '焖', emoji: '🍲', category: '炖类', tip: '酥烂入味', format: 'a+b', weight: 1 },
+    { method: '焗', emoji: '🥩', category: '烤类', tip: '奶香浓郁', format: 'verb+main', weight: 1 },
+    { method: '凉拌', emoji: '🥗', category: '拌类', tip: '清凉爽口', format: 'a+b', weight: 1 },
+    { method: '羹', emoji: '🥣', category: '汤类', tip: '浓稠顺滑', format: 'a+b+soup', weight: 1 }
 ];
+
 
 // ============================================
 // 工具函数
@@ -149,6 +136,26 @@ function pickRandom(arr) {
         return null;
     }
     return arr[Math.floor(Math.random() * arr.length)];
+}
+
+// 加权随机抽取函数
+function pickWeightedRandom(arr) {
+    if (!arr || arr.length === 0) {
+        console.error('数组为空或未定义！');
+        return null;
+    }
+    
+    const totalWeight = arr.reduce((sum, item) => sum + (item.weight || 1), 0);
+    let random = Math.random() * totalWeight;
+    
+    for (const item of arr) {
+        random -= (item.weight || 1);
+        if (random <= 0) {
+            return item;
+        }
+    }
+    
+    return arr[arr.length - 1];
 }
 
 function hasTag(item, tag) {
@@ -181,7 +188,7 @@ function generateDish() {
     }
     
     // 2. 随机选烹饪方式
-    const cook = pickRandom(cookDB);
+    const cook = pickWeightedRandom(cookDB);
     
     // 3. 判断是否触发风味彩蛋（5%概率，需要辅料是特殊食材）
     const isFlavor = Math.random() < 0.05 && hasTag(veg, '特殊');
