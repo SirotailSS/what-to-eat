@@ -210,17 +210,17 @@ function generateDishName(dish) {
     const vegName = getFoodName(dish.veg);
     const method = dish.cook.method;
     const category = dish.cook.category;
-    const format = dish.cook.format;
     
     let dishNameText = '';
     
-    // 判断食材类型
     const isMainMeat = hasTag(dish.main, 'meat');
-    const isVegMeat = hasTag(dish.veg, 'meat');
     const isMainSeafood = hasTag(dish.main, 'seafood');
-    const isVegSeafood = hasTag(dish.veg, 'seafood');
     const isMainEgg = hasTag(dish.main, 'egg');
-    const isVegEgg = hasTag(dish.veg, 'egg');
+    
+    // ===== 风味彩蛋触发时，菜名主体不包含辅料 =====
+    // 汤类例外，因为需要辅料构成汤名
+    const isSoup = category === '汤类';
+    const shouldExcludeVeg = dish.isFlavor && !isSoup;
     
     // ===== 按烹饪分类生成菜名 =====
     switch (category) {
@@ -231,70 +231,78 @@ function generateDishName(dish) {
         case '炖类':
         case '烧类':
         case '拌类':
-            // 格式：主料 + 动词 + 辅料
-            dishNameText = mainName + method + vegName;
+            if (shouldExcludeVeg) {
+                // 触发风味：动词 + 主料（清蒸丝瓜）
+                dishNameText = method + mainName;
+            } else {
+                // 正常：主料 + 动词 + 辅料（丝瓜清蒸榴莲泥）
+                dishNameText = mainName + method + vegName;
+            }
             break;
             
         case '炸类':
-            // 主料是肉/水产/蛋 → 炸主料配辅料
-            if (isMainMeat || isMainSeafood || isMainEgg) {
-                dishNameText = method + mainName + '配' + vegName;
-            } else {
-                dishNameText = mainName + method + vegName;
-            }
-            break;
-            
         case '烤类':
-            // 主料是肉/水产 → 烤主料配辅料
-            if (isMainMeat || isMainSeafood) {
-                dishNameText = method + mainName + '配' + vegName;
-            } else {
-                dishNameText = mainName + method + vegName;
-            }
-            break;
-            
         case '煎类':
-            // 主料是肉/水产/蛋 → 煎主料配辅料
-            if (isMainMeat || isMainSeafood || isMainEgg) {
-                dishNameText = method + mainName + '配' + vegName;
+            const isMainProtein = isMainMeat || isMainSeafood || isMainEgg;
+            if (isMainProtein) {
+                if (shouldExcludeVeg) {
+                    // 触发风味：动词 + 主料（煎鸡腿肉）
+                    dishNameText = method + mainName;
+                } else {
+                    // 正常：动词 + 主料 + 配 + 辅料（香煎鸡腿肉配冬瓜）
+                    dishNameText = method + mainName + '配' + vegName;
+                }
             } else {
-                dishNameText = mainName + method + vegName;
+                if (shouldExcludeVeg) {
+                    // 触发风味：动词 + 主料（煎豆腐）
+                    dishNameText = method + mainName;
+                } else {
+                    // 正常：主料 + 动词 + 辅料（豆腐煎鸡蛋）
+                    dishNameText = mainName + method + vegName;
+                }
             }
             break;
             
         case '汤类':
-            // 格式：主料 + 辅料 + 汤
+            // 汤类特殊处理：无论是否触发风味，都需要辅料
             dishNameText = mainName + vegName + method;
             break;
             
         default:
-            // 兜底
-            dishNameText = mainName + method + vegName;
+            if (shouldExcludeVeg) {
+                dishNameText = method + mainName;
+            } else {
+                dishNameText = mainName + method + vegName;
+            }
     }
     
-    // ===== 特殊规则：经典菜名硬编码 =====
-    // 炒类：西红柿炒鸡蛋
-    if (mainName === '鸡蛋' && vegName === '西红柿' && category === '炒类') {
-        dishNameText = '西红柿炒鸡蛋';
-    }
-    if (mainName === '西红柿' && vegName === '鸡蛋' && category === '炒类') {
-        dishNameText = '西红柿炒鸡蛋';
-    }
-    
-    // 汤类：鲫鱼豆腐汤、西红柿鸡蛋汤
-    if (category === '汤类') {
-        if ((mainName === '鲫鱼' && vegName === '豆腐') || (mainName === '豆腐' && vegName === '鲫鱼')) {
-            dishNameText = '鲫鱼豆腐汤';
+    // ===== 经典菜名硬编码（仅当未排除辅料时） =====
+    if (!shouldExcludeVeg) {
+        // 炒类经典
+        if ((mainName === '鸡蛋' && vegName === '西红柿') || (mainName === '西红柿' && vegName === '鸡蛋')) {
+            if (category === '炒类') {
+                dishNameText = '西红柿炒鸡蛋';
+            }
         }
-        if ((mainName === '西红柿' && vegName === '鸡蛋') || (mainName === '鸡蛋' && vegName === '西红柿')) {
-            dishNameText = '西红柿鸡蛋汤';
+        // 汤类经典
+        if (category === '汤类') {
+            if ((mainName === '鲫鱼' && vegName === '豆腐') || (mainName === '豆腐' && vegName === '鲫鱼')) {
+                dishNameText = '鲫鱼豆腐汤';
+            }
+            if ((mainName === '西红柿' && vegName === '鸡蛋') || (mainName === '鸡蛋' && vegName === '西红柿')) {
+                dishNameText = '西红柿鸡蛋汤';
+            }
         }
     }
     
-    // ===== 风味彩蛋：5%概率添加风味前缀 =====
+    // ===== 风味彩蛋：添加风味前缀 =====
     if (dish.isFlavor) {
         const flavorName = vegName;
-        dishNameText = flavorName + '风味' + dishNameText;
+        // 如果菜名中已经包含风味词，不再重复添加
+        if (!dishNameText.includes(flavorName)) {
+            // 风味前缀放在最前面
+            dishNameText = flavorName + '风味' + dishNameText;
+        }
     }
     
     return dishNameText;
