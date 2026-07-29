@@ -1,85 +1,175 @@
 // ============================================
-// 数据建设
+// 数据建设 - 食材库（60+种，带标签）
 // ============================================
 
-// 1. 总食材库（合并所有食材，至少30种）
 const foodDB = [
-    // 荤菜类
-    '五花肉', '鸡腿肉', '牛肉片', '羊肉片', '虾仁', '鱿鱼须',
-    '排骨', '鸡胸肉', '鸭肉', '鱼肉片', '猪里脊', '牛腩', 
-    '鸡翅中', '肥牛卷', '猪肝', '虾滑', '猪大肠',
-    // 素菜类
-    '土豆', '茄子', '西红柿', '西兰花', '青椒', '洋葱', 
-    '胡萝卜', '白菜', '菠菜', '豆芽', '蘑菇', '金针菇',
-    '莲藕', '笋片', '黄瓜', '芹菜', '豌豆', '玉米粒',
-    // 蛋/豆制品
-    '鸡蛋', '豆腐', '腐竹', '千张'
+    // ===== 肉类（红肉） =====
+    { name: '五花肉', tags: ['肉类', '红肉', 'meat'] },
+    { name: '猪里脊', tags: ['肉类', '红肉', 'meat'] },
+    { name: '排骨', tags: ['肉类', '红肉', 'meat'] },
+    { name: '猪肝', tags: ['肉类', '红肉', 'meat'] },
+    { name: '肥牛卷', tags: ['肉类', '红肉', 'meat'] },
+    { name: '牛腩', tags: ['肉类', '红肉', 'meat'] },
+    { name: '牛肉片', tags: ['肉类', '红肉', 'meat'] },
+    { name: '羊肉片', tags: ['肉类', '红肉', 'meat'] },
+    
+    // ===== 禽类 =====
+    { name: '鸡腿肉', tags: ['禽类', '白肉', 'meat'] },
+    { name: '鸡胸肉', tags: ['禽类', '白肉', 'meat'] },
+    { name: '鸡翅中', tags: ['禽类', '白肉', 'meat'] },
+    { name: '鸭肉', tags: ['禽类', '白肉', 'meat'] },
+    { name: '鹅肉', tags: ['禽类', '白肉', 'meat'] },
+    
+    // ===== 水产 =====
+    { name: '鲫鱼', tags: ['水产', '鱼类', 'seafood'] },
+    { name: '草鱼', tags: ['水产', '鱼类', 'seafood'] },
+    { name: '鲈鱼', tags: ['水产', '鱼类', 'seafood'] },
+    { name: '三文鱼', tags: ['水产', '鱼类', 'seafood'] },
+    { name: '龙利鱼', tags: ['水产', '鱼类', 'seafood'] },
+    { name: '虾仁', tags: ['水产', '虾蟹', 'seafood'] },
+    { name: '大虾', tags: ['水产', '虾蟹', 'seafood'] },
+    { name: '螃蟹', tags: ['水产', '虾蟹', 'seafood'] },
+    { name: '鱿鱼须', tags: ['水产', '贝类', 'seafood'] },
+    { name: '扇贝', tags: ['水产', '贝类', 'seafood'] },
+    { name: '蛤蜊', tags: ['水产', '贝类', 'seafood'] },
+    
+    // ===== 蛋类 =====
+    { name: '鸡蛋', tags: ['蛋类', 'egg'] },
+    { name: '鸭蛋', tags: ['蛋类', 'egg'] },
+    
+    // ===== 豆制品 =====
+    { name: '豆腐', tags: ['豆制品', 'veg'] },
+    { name: '老豆腐', tags: ['豆制品', 'veg'] },
+    { name: '嫩豆腐', tags: ['豆制品', 'veg'] },
+    { name: '腐竹', tags: ['豆制品', 'veg'] },
+    { name: '千张', tags: ['豆制品', 'veg'] },
+    { name: '豆干', tags: ['豆制品', 'veg'] },
+    
+    // ===== 叶菜类 =====
+    { name: '白菜', tags: ['蔬菜', '叶菜', 'veg'] },
+    { name: '菠菜', tags: ['蔬菜', '叶菜', 'veg'] },
+    { name: '生菜', tags: ['蔬菜', '叶菜', 'veg'] },
+    { name: '油菜', tags: ['蔬菜', '叶菜', 'veg'] },
+    { name: '韭菜', tags: ['蔬菜', '叶菜', 'veg'] },
+    
+    // ===== 根茎类 =====
+    { name: '土豆', tags: ['蔬菜', '根茎', 'veg'] },
+    { name: '胡萝卜', tags: ['蔬菜', '根茎', 'veg'] },
+    { name: '莲藕', tags: ['蔬菜', '根茎', 'veg'] },
+    { name: '山药', tags: ['蔬菜', '根茎', 'veg'] },
+    { name: '红薯', tags: ['蔬菜', '根茎', 'veg'] },
+    
+    // ===== 瓜果类 =====
+    { name: '西红柿', tags: ['蔬菜', '瓜果', 'veg'] },
+    { name: '茄子', tags: ['蔬菜', '瓜果', 'veg'] },
+    { name: '青椒', tags: ['蔬菜', '瓜果', 'veg'] },
+    { name: '红椒', tags: ['蔬菜', '瓜果', 'veg'] },
+    { name: '黄椒', tags: ['蔬菜', '瓜果', 'veg'] },
+    { name: '黄瓜', tags: ['蔬菜', '瓜果', 'veg'] },
+    { name: '冬瓜', tags: ['蔬菜', '瓜果', 'veg'] },
+    { name: '丝瓜', tags: ['蔬菜', '瓜果', 'veg'] },
+    { name: '苦瓜', tags: ['蔬菜', '瓜果', 'veg'] },
+    { name: '南瓜', tags: ['蔬菜', '瓜果', 'veg'] },
+    
+    // ===== 菌菇类 =====
+    { name: '蘑菇', tags: ['蔬菜', '菌菇', 'veg'] },
+    { name: '香菇', tags: ['蔬菜', '菌菇', 'veg'] },
+    { name: '金针菇', tags: ['蔬菜', '菌菇', 'veg'] },
+    { name: '杏鲍菇', tags: ['蔬菜', '菌菇', 'veg'] },
+    { name: '木耳', tags: ['蔬菜', '菌菇', 'veg'] },
+    
+    // ===== 特殊食材（原黑暗调料，作为风味来源） =====
+    { name: '草莓', tags: ['特殊', 'fruit'] },
+    { name: '巧克力酱', tags: ['特殊', 'sauce'] },
+    { name: '咖啡粉', tags: ['特殊', 'spice'] },
+    { name: '芝士片', tags: ['特殊', 'dairy'] },
+    { name: '薄荷糖', tags: ['特殊', 'sweet'] },
+    { name: '柠檬汁', tags: ['特殊', 'sauce'] },
+    { name: '芒果粒', tags: ['特殊', 'fruit'] },
+    { name: '蓝莓酱', tags: ['特殊', 'sauce'] },
+    { name: '棉花糖', tags: ['特殊', 'sweet'] },
+    { name: '榴莲泥', tags: ['特殊', 'fruit'] }
 ];
 
-// 3. 暗黑调料数据库（至少8种，用于彩蛋机制）
-const magicDB = [
-    '草莓',
-    '巧克力酱',
-    '咖啡粉',
-    '芝士片',
-    '薄荷糖',
-    '柠檬汁',
-    '芒果粒',
-    '蓝莓酱',
-    '棉花糖',
-    '榴莲泥'
-];
+// ============================================
+// 数据建设 - 烹饪方式库（20种）
+// ============================================
 
-// 4. 烹饪方式数据库（至少10种，带Emoji和提示）
 const cookDB = [
-    { method: '爆炒', emoji: '🔥', tip: '大火快熟' },
-    { method: '红烧', emoji: '🍲', tip: '慢炖入味' },
-    { method: '清蒸', emoji: '♨️', tip: '原汁原味' },
-    { method: '油炸', emoji: '🍗', tip: '外酥里嫩' },
-    { method: '凉拌', emoji: '🥗', tip: '清爽开胃' },
-    { method: '烧烤', emoji: '🥩', tip: '焦香四溢' },
-    { method: '炖汤', emoji: '🥣', tip: '营养暖胃' },
-    { method: '煎制', emoji: '🍳', tip: '两面金黄' },
-    { method: '焖煮', emoji: '🍛', tip: '软烂入味' },
-    { method: '干煸', emoji: '🌶️', tip: '麻辣干香' },
-    { method: '水煮', emoji: '🥘', tip: '鲜嫩滑爽' },
-    { method: '酱爆', emoji: '🧄', tip: '酱香浓郁' },
-    { method: '刺身', emoji: '🍣', tip: '生食原味' }
+    // 炒类
+    { method: '炒', emoji: '🔥', category: '炒类', tip: '大火快熟', format: 'a+b' },
+    { method: '爆炒', emoji: '🔥', category: '炒类', tip: '大火快炒', format: 'a+b' },
+    
+    // 炸类
+    { method: '炸', emoji: '🍗', category: '炸类', tip: '外酥里嫩', format: 'verb+main' },
+    { method: '酥炸', emoji: '🍗', category: '炸类', tip: '酥脆可口', format: 'verb+main' },
+    
+    // 蒸类
+    { method: '蒸', emoji: '♨️', category: '蒸类', tip: '原汁原味', format: 'a+b' },
+    { method: '清蒸', emoji: '♨️', category: '蒸类', tip: '清淡鲜美', format: 'a+b' },
+    
+    // 煮类
+    { method: '煮', emoji: '🥘', category: '煮类', tip: '鲜嫩入味', format: 'a+b' },
+    { method: '水煮', emoji: '🥘', category: '煮类', tip: '麻辣鲜香', format: 'a+b' },
+    
+    // 炖类
+    { method: '炖', emoji: '🍲', category: '炖类', tip: '软烂入味', format: 'a+b' },
+    { method: '煲', emoji: '🍲', category: '炖类', tip: '慢火煲制', format: 'a+b' },
+    { method: '焖', emoji: '🍲', category: '炖类', tip: '酥烂入味', format: 'a+b' },
+    
+    // 烧类
+    { method: '烧', emoji: '🧄', category: '烧类', tip: '酱香浓郁', format: 'a+b' },
+    { method: '红烧', emoji: '🧄', category: '烧类', tip: '色泽红亮', format: 'a+b' },
+    { method: '干烧', emoji: '🧄', category: '烧类', tip: '干香入味', format: 'a+b' },
+    
+    // 烤类
+    { method: '烤', emoji: '🥩', category: '烤类', tip: '焦香四溢', format: 'verb+main' },
+    { method: '焗', emoji: '🥩', category: '烤类', tip: '奶香浓郁', format: 'verb+main' },
+    
+    // 拌类
+    { method: '拌', emoji: '🥗', category: '拌类', tip: '清爽开胃', format: 'a+b' },
+    { method: '凉拌', emoji: '🥗', category: '拌类', tip: '清凉爽口', format: 'a+b' },
+    
+    // 煎类
+    { method: '煎', emoji: '🍳', category: '煎类', tip: '两面金黄', format: 'verb+main' },
+    { method: '香煎', emoji: '🍳', category: '煎类', tip: '香气扑鼻', format: 'verb+main' },
+    
+    // 汤类
+    { method: '汤', emoji: '🥣', category: '汤类', tip: '营养暖胃', format: 'a+b+soup' },
+    { method: '羹', emoji: '🥣', category: '汤类', tip: '浓稠顺滑', format: 'a+b+soup' }
 ];
 
 // ============================================
-// 核心逻辑编写
+// 工具函数
 // ============================================
 
-// 1. 基础随机抽取函数
 function pickRandom(arr) {
     if (!arr || arr.length === 0) {
         console.error('数组为空或未定义！');
         return null;
     }
-    const randomIndex = Math.floor(Math.random() * arr.length);
-    return arr[randomIndex];
+    return arr[Math.floor(Math.random() * arr.length)];
 }
 
-// 2. 配菜生成器主函数（方案三：从总食材库中取两种不同的食材）
+function hasTag(item, tag) {
+    return item.tags && item.tags.includes(tag);
+}
+
+function getFoodName(item) {
+    return item.name;
+}
+
+function getFoodByTag(tag) {
+    return foodDB.filter(item => hasTag(item, tag));
+}
+
+// ============================================
+// 核心逻辑 - 配菜生成器
+// ============================================
+
 function generateDish() {
-    // ===== 【刺身彩蛋】2%概率触发：随机荤菜变刺身 =====
-    if (Math.random() < 0.02) {
-        const meatItems = ['五花肉', '鸡腿肉', '牛肉片', '羊肉片', '虾仁', '鱿鱼须', 
-                          '排骨', '鸡胸肉', '鸭肉', '鱼肉片', '猪里脊', '牛腩', 
-                          '鸡翅中', '肥牛卷', '猪肝', '虾滑', '猪大肠'];
-        const selectedMeat = pickRandom(meatItems);
-        console.log('🎉 刺身彩蛋触发！' + selectedMeat + '刺身！');
-        return {
-            main: selectedMeat,
-            veg: '无',
-            cook: { method: '刺身', emoji: '🍣', tip: '生食原味' },
-            isDark: false,
-            isSashimi: true
-        };
-    }
-    
-    const main = pickRandom(foodDB);
+    // 1. 从食材库中随机选两个不同的食材
+    let main = pickRandom(foodDB);
     let veg = pickRandom(foodDB);
     let attempts = 0;
     while (veg === main && attempts < 20) {
@@ -87,28 +177,124 @@ function generateDish() {
         attempts++;
     }
     if (veg === main) {
-        veg = '土豆';
+        veg = pickRandom(foodDB);
     }
     
+    // 2. 随机选烹饪方式
     const cook = pickRandom(cookDB);
-    const isDark = Math.random() < 0.2;
-    let finalVeg = veg;
-    if (isDark) {
-        const magic = pickRandom(magicDB);
-        finalVeg = veg + '+' + magic;
-        console.log('💀 黑暗料理触发！添加了：', magic);
-    }
+    
+    // 3. 判断是否触发风味彩蛋（5%概率，需要辅料是特殊食材）
+    const isFlavor = Math.random() < 0.05 && hasTag(veg, '特殊');
     
     return {
         main: main,
-        veg: finalVeg,
+        veg: veg,
         cook: cook,
-        isDark: isDark
+        isFlavor: isFlavor
     };
 }
 
 // ============================================
-// 交互功能联动
+// 菜名生成器
+// ============================================
+
+function generateDishName(dish) {
+    const mainName = getFoodName(dish.main);
+    const vegName = getFoodName(dish.veg);
+    const method = dish.cook.method;
+    const category = dish.cook.category;
+    const format = dish.cook.format;
+    
+    let dishNameText = '';
+    
+    // 判断食材类型
+    const isMainMeat = hasTag(dish.main, 'meat');
+    const isVegMeat = hasTag(dish.veg, 'meat');
+    const isMainSeafood = hasTag(dish.main, 'seafood');
+    const isVegSeafood = hasTag(dish.veg, 'seafood');
+    const isMainEgg = hasTag(dish.main, 'egg');
+    const isVegEgg = hasTag(dish.veg, 'egg');
+    
+    // ===== 按烹饪分类生成菜名 =====
+    switch (category) {
+        case '炒类':
+        case '爆炒':
+        case '蒸类':
+        case '煮类':
+        case '炖类':
+        case '烧类':
+        case '拌类':
+            // 格式：主料 + 动词 + 辅料
+            dishNameText = mainName + method + vegName;
+            break;
+            
+        case '炸类':
+            // 如果主料是肉类/水产/蛋，格式：炸 + 主料
+            if (isMainMeat || isMainSeafood || isMainEgg) {
+                dishNameText = method + mainName;
+            } else {
+                dishNameText = mainName + method + vegName;
+            }
+            break;
+            
+        case '烤类':
+            if (isMainMeat || isMainSeafood) {
+                dishNameText = method + mainName;
+            } else {
+                dishNameText = mainName + method + vegName;
+            }
+            break;
+            
+        case '煎类':
+            if (isMainMeat || isMainSeafood || isMainEgg) {
+                dishNameText = method + mainName;
+            } else {
+                dishNameText = mainName + method + vegName;
+            }
+            break;
+            
+        case '汤类':
+            // 格式：主料 + 辅料 + 汤
+            dishNameText = mainName + vegName + method;
+            break;
+            
+        default:
+            // 兜底
+            dishNameText = mainName + method + vegName;
+    }
+    
+    // ===== 特殊规则：如果主料是鸡蛋，辅料是西红柿，固定为"西红柿炒鸡蛋" =====
+    if (mainName === '鸡蛋' && vegName === '西红柿' && category === '炒类') {
+        dishNameText = '西红柿炒鸡蛋';
+    }
+    if (mainName === '西红柿' && vegName === '鸡蛋' && category === '炒类') {
+        dishNameText = '西红柿炒鸡蛋';
+    }
+    
+    // ===== 特殊规则：汤类经典名 =====
+    if (category === '汤类') {
+        // 鲫鱼豆腐汤
+        if ((mainName === '鲫鱼' && vegName === '豆腐') || (mainName === '豆腐' && vegName === '鲫鱼')) {
+            dishNameText = '鲫鱼豆腐汤';
+        }
+        // 西红柿鸡蛋汤
+        if ((mainName === '西红柿' && vegName === '鸡蛋') || (mainName === '鸡蛋' && vegName === '西红柿')) {
+            dishNameText = '西红柿鸡蛋汤';
+        }
+    }
+    
+    // ===== 风味彩蛋：5%概率添加风味前缀 =====
+    if (dish.isFlavor) {
+        // 从特殊食材中提取风味名称
+        const flavorName = vegName;
+        dishNameText = flavorName + '风味' + dishNameText;
+    }
+    
+    return dishNameText;
+}
+
+// ============================================
+// DOM 操作与交互
 // ============================================
 
 const cookDisplay = document.getElementById('cookDisplay');
@@ -118,7 +304,6 @@ const cookTip = document.getElementById('cookTip');
 const dishName = document.getElementById('dishName');
 const generateBtn = document.getElementById('generateBtn');
 const resetBtn = document.getElementById('resetBtn');
-const darkTip = document.getElementById('darkTip');
 
 const cardCook = document.getElementById('cardCook');
 const cardMain = document.getElementById('cardMain');
@@ -129,11 +314,6 @@ function startRolling() {
     cardMain.classList.add('rolling');
     cardVeg.classList.add('rolling');
     generateBtn.disabled = true;
-    darkTip.style.display = 'none';
-    cardCook.classList.remove('dark');
-    cardMain.classList.remove('dark');
-    cardVeg.classList.remove('dark');
-    dishName.classList.remove('dark');
 }
 
 function stopRolling() {
@@ -144,112 +324,15 @@ function stopRolling() {
 }
 
 function updateDishDisplay(dish) {
+    // 更新卡片内容
     cookDisplay.textContent = dish.cook.emoji + ' ' + dish.cook.method;
-    mainDisplay.textContent = dish.main;
-    vegDisplay.textContent = dish.veg;
+    mainDisplay.textContent = getFoodName(dish.main);
+    vegDisplay.textContent = getFoodName(dish.veg);
     cookTip.textContent = '💡 ' + dish.cook.tip;
     
-    const method = dish.cook.method;
-    const main = dish.main;
-    const veg = dish.veg;
-    const vegClean = veg.split('+')[0];
-    
-    const meatKeywords = ['肉', '鸡', '鸭', '鱼', '虾', '鱿鱼', '排骨', '牛腩', '肥牛', '猪肝', '虾滑'];
-    const isMainMeat = meatKeywords.some(keyword => main.includes(keyword));
-    const isVegMeat = meatKeywords.some(keyword => vegClean.includes(keyword));
-    
-    const isStirFry = ['爆炒', '干煸', '煎制', '酱爆'].includes(method);
-    const isStew = ['红烧', '焖煮', '炖汤'].includes(method);
-    const isSteam = ['清蒸'].includes(method);
-    const isCold = ['凉拌'].includes(method);
-    const isDeepFry = ['油炸'].includes(method);
-    const isBoil = ['水煮'].includes(method);
-    const isGrill = ['烧烤'].includes(method);
-    
-    let dishNameText = '';
-    
-    if ((main === '鸡蛋' && vegClean === '西红柿') || (main === '西红柿' && vegClean === '鸡蛋')) {
-        if (isStirFry || isStew) {
-            dishNameText = '西红柿炒鸡蛋';
-        } else {
-            dishNameText = '西红柿' + method + '鸡蛋';
-        }
-    } else if ((main === '牛腩' && vegClean === '土豆') || (main === '土豆' && vegClean === '牛腩')) {
-        dishNameText = '土豆炖牛腩';
-    } else if ((main === '排骨' && vegClean === '土豆') || (main === '土豆' && vegClean === '排骨')) {
-        dishNameText = '土豆烧排骨';
-    } else if (dish.isSashimi || (method === '刺身' && (isMainMeat || isVegMeat))) {
-        const meatName = isMainMeat ? main : vegClean;
-        dishNameText = meatName + '刺身';
-    } else {
-        let connectWord = '';
-        if (isStirFry) {
-            connectWord = '炒';
-        } else if (isStew) {
-            connectWord = method === '红烧' ? '烧' : '炖';
-        } else if (isCold) {
-            connectWord = '拌';
-        } else if (isSteam) {
-            connectWord = '蒸';
-        } else if (isDeepFry) {
-            connectWord = '炸';
-        } else if (isBoil) {
-            connectWord = '煮';
-        } else if (isGrill) {
-            connectWord = Math.random() < 0.7 ? '烤' : '配';
-        } else {
-            connectWord = Math.random() < 0.5 ? '配' : method;
-        }
-        const isVegSpecial = ['鸡蛋', '豆腐'].includes(vegClean);
-        if (isMainMeat && !isVegMeat) {
-            dishNameText = main + connectWord + vegClean;
-        } else if (!isMainMeat && isVegMeat) {
-            dishNameText = vegClean + connectWord + main;
-        } else if (isVegSpecial && !isMainMeat) {
-            dishNameText = vegClean + connectWord + main;
-        } else {
-            dishNameText = main + connectWord + vegClean;
-        }
-    }
-    
-    if (dish.isDark) {
-        const magicPart = veg.split('+')[1];
-        if (magicPart) {
-            if (['巧克力酱', '蓝莓酱', '芝士片'].includes(magicPart)) {
-                dishNameText = magicPart + '风味' + dishNameText;
-            } else {
-                dishNameText = magicPart + dishNameText;
-            }
-            if (dishNameText.includes('刺身')) {
-                const baseName = dishNameText.replace('刺身', '');
-                dishNameText = magicPart + '味' + baseName + '刺身';
-            }
-        }
-    }
-    
+    // 生成菜名
+    const dishNameText = generateDishName(dish);
     dishName.textContent = '🍽️ ' + dishNameText;
-    
-    if (dish.isSashimi || dishNameText.includes('刺身')) {
-        darkTip.style.display = 'block';
-        darkTip.textContent = '🍣 刺身彩蛋触发！请勿真的尝试生食！';
-        darkTip.style.background = 'rgba(255, 200, 0, 0.3)';
-        darkTip.style.border = '1px solid rgba(255, 200, 0, 0.3)';
-        if (!dish.isDark) {
-            cardCook.classList.add('dark');
-            cardMain.classList.add('dark');
-            cardVeg.classList.add('dark');
-            dishName.classList.add('dark');
-        }
-    } else if (dish.isDark) {
-        darkTip.style.display = 'block';
-        darkTip.textContent = '💀 黑暗料理彩蛋触发！';
-        darkTip.style.background = '';
-        darkTip.style.border = '';
-    } else {
-        darkTip.style.display = 'none';
-        darkTip.style.background = '';
-        darkTip.style.border = '';
-    }
 }
 
 function rollDish() {
@@ -259,8 +342,8 @@ function rollDish() {
     const intervalId = setInterval(() => {
         const tempDish = generateDish();
         cookDisplay.textContent = tempDish.cook.emoji + ' ' + tempDish.cook.method;
-        mainDisplay.textContent = tempDish.main;
-        vegDisplay.textContent = tempDish.veg;
+        mainDisplay.textContent = getFoodName(tempDish.main);
+        vegDisplay.textContent = getFoodName(tempDish.veg);
         cookTip.textContent = '💡 ' + tempDish.cook.tip;
         rollCount++;
         if (rollCount >= maxRolls) {
@@ -278,18 +361,13 @@ function resetDish() {
     vegDisplay.textContent = '❓';
     cookTip.textContent = '点击下方按钮开始';
     dishName.textContent = '👆 点击下方按钮生成菜品';
-    cardCook.classList.remove('rolling', 'dark');
-    cardMain.classList.remove('rolling', 'dark');
-    cardVeg.classList.remove('rolling', 'dark');
-    dishName.classList.remove('dark');
-    darkTip.style.display = 'none';
+    cardCook.classList.remove('rolling');
+    cardMain.classList.remove('rolling');
+    cardVeg.classList.remove('rolling');
     generateBtn.disabled = false;
-    // 关闭分享浮层（如果有）
     closeShareOverlay();
-    // 重置分享按钮
     shareBtn.textContent = '📤 分享今天的美食';
     shareBtn.disabled = false;
-    // 重置二维码区域
     resetQRCode();
 }
 
@@ -299,7 +377,7 @@ resetBtn.addEventListener('click', resetDish);
 console.log('🍽️ 配菜工具已就绪！点击"配菜！"按钮开始随机搭配。');
 
 // ============================================
-// 分享功能 - 二维码嵌入页面布局
+// 分享功能
 // ============================================
 
 const shareBtn = document.getElementById('shareBtn');
@@ -308,19 +386,16 @@ const qrPlaceholder = document.getElementById('qrPlaceholder');
 const qrWrapper = document.getElementById('qrWrapper');
 const qrElement = document.getElementById('qrcode');
 
-// 检测是否为移动端
 function isMobileDevice() {
     return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 }
 
-// 重置二维码区域
 function resetQRCode() {
     qrWrapper.style.display = 'none';
     qrPlaceholder.style.display = 'flex';
     qrElement.innerHTML = '';
 }
 
-// 生成二维码（显示在页面布局中）
 function generateQR() {
     qrElement.innerHTML = '';
     new QRCode(qrElement, {
@@ -333,10 +408,7 @@ function generateQR() {
     });
 }
 
-// 显示二维码（替换占位符）
-// 显示二维码（替换占位符）
 function showQRCode() {
-    // 清空并重新生成二维码
     qrElement.innerHTML = '';
     new QRCode(qrElement, {
         text: window.location.href,
@@ -346,16 +418,11 @@ function showQRCode() {
         colorLight: '#ffffff',
         correctLevel: QRCode.CorrectLevel.H
     });
-    
-    // 切换显示
     qrPlaceholder.style.display = 'none';
     qrWrapper.style.display = 'flex';
-    
-    // 强制回流，确保二维码完全渲染（无动画残留）
     void qrWrapper.offsetHeight;
 }
 
-// 关闭分享浮层
 function closeShareOverlay() {
     const overlay = document.getElementById('shareOverlay');
     if (overlay) {
@@ -364,7 +431,6 @@ function closeShareOverlay() {
     document.body.style.overflow = '';
 }
 
-// 显示全屏浮层（移动端长按保存）
 function showShareOverlay(imageDataUrl) {
     closeShareOverlay();
 
@@ -480,7 +546,6 @@ function showShareOverlay(imageDataUrl) {
     }, 30000);
 }
 
-// 下载图片（电脑端）
 function downloadImage(canvas) {
     canvas.toBlob(function(blob) {
         const link = document.createElement('a');
@@ -499,14 +564,12 @@ async function shareScreenshot() {
     const isMobile = isMobileDevice();
     const originalText = shareBtn.textContent;
     
-    // 1. 显示二维码（在页面布局中）
     showQRCode();
     
     shareBtn.textContent = '⏳ 生成中...';
     shareBtn.disabled = true;
 
     try {
-        // 2. 截图（二维码已在页面中）
         const canvas = await html2canvas(document.body, {
             scale: 2,
             useCORS: true,
@@ -515,16 +578,13 @@ async function shareScreenshot() {
             logging: false
         });
 
-        // 3. 获取图片数据
         const imageDataUrl = canvas.toDataURL('image/png');
 
-        // ===== 移动端：全屏浮层显示，引导长按保存 =====
         if (isMobile) {
             showShareOverlay(imageDataUrl);
             return;
         }
 
-        // ===== 电脑端：直接下载 =====
         downloadImage(canvas);
 
         shareBtn.textContent = '✅ 已下载！';
