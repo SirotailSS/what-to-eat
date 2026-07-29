@@ -78,17 +78,34 @@ const foodDB = [
     { name: '杏鲍菇', tags: ['蔬菜', '菌菇', 'veg'] },
     { name: '木耳', tags: ['蔬菜', '菌菇', 'veg'] },
     
-    // ===== 特殊食材（原黑暗调料，作为风味来源） =====
+    // ===== 特殊食材（水果/甜味食材，作为风味来源） =====
+    // 水果类
     { name: '草莓', tags: ['特殊', 'fruit'] },
+    { name: '西瓜', tags: ['特殊', 'fruit'] },
+    { name: '橙子', tags: ['特殊', 'fruit'] },
+    { name: '香蕉', tags: ['特殊', 'fruit'] },
+    { name: '芒果', tags: ['特殊', 'fruit'] },
+    { name: '菠萝', tags: ['特殊', 'fruit'] },
+    { name: '水蜜桃', tags: ['特殊', 'fruit'] },
+    { name: '苹果', tags: ['特殊', 'fruit'] },
+    { name: '柠檬', tags: ['特殊', 'fruit'] },
+    { name: '荔枝', tags: ['特殊', 'fruit'] },
+    { name: '龙眼', tags: ['特殊', 'fruit'] },
+    { name: '火龙果', tags: ['特殊', 'fruit'] },
+    { name: '猕猴桃', tags: ['特殊', 'fruit'] },
+    { name: '葡萄', tags: ['特殊', 'fruit'] },
+    { name: '榴莲', tags: ['特殊', 'fruit'] },
+    { name: '芒果粒', tags: ['特殊', 'fruit'] },
+    // 酱料/甜味类
+    { name: '榴莲泥', tags: ['特殊', 'fruit'] },
+    { name: '草莓酱', tags: ['特殊', 'sauce'] },
+    { name: '蓝莓酱', tags: ['特殊', 'sauce'] },
     { name: '巧克力酱', tags: ['特殊', 'sauce'] },
+    { name: '柠檬汁', tags: ['特殊', 'sauce'] },
     { name: '咖啡粉', tags: ['特殊', 'spice'] },
     { name: '芝士片', tags: ['特殊', 'dairy'] },
     { name: '薄荷糖', tags: ['特殊', 'sweet'] },
-    { name: '柠檬汁', tags: ['特殊', 'sauce'] },
-    { name: '芒果粒', tags: ['特殊', 'fruit'] },
-    { name: '蓝莓酱', tags: ['特殊', 'sauce'] },
-    { name: '棉花糖', tags: ['特殊', 'sweet'] },
-    { name: '榴莲泥', tags: ['特殊', 'fruit'] }
+    { name: '棉花糖', tags: ['特殊', 'sweet'] }
 ];
 
 // ============================================
