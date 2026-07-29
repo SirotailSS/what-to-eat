@@ -229,25 +229,27 @@ function generateDishName(dish) {
             break;
             
         case '炸类':
-            // 如果主料是肉类/水产/蛋，格式：炸 + 主料
+            // 主料是肉/水产/蛋 → 炸主料配辅料
             if (isMainMeat || isMainSeafood || isMainEgg) {
-                dishNameText = method + mainName;
+                dishNameText = method + mainName + '配' + vegName;
             } else {
                 dishNameText = mainName + method + vegName;
             }
             break;
             
         case '烤类':
+            // 主料是肉/水产 → 烤主料配辅料
             if (isMainMeat || isMainSeafood) {
-                dishNameText = method + mainName;
+                dishNameText = method + mainName + '配' + vegName;
             } else {
                 dishNameText = mainName + method + vegName;
             }
             break;
             
         case '煎类':
+            // 主料是肉/水产/蛋 → 煎主料配辅料
             if (isMainMeat || isMainSeafood || isMainEgg) {
-                dishNameText = method + mainName;
+                dishNameText = method + mainName + '配' + vegName;
             } else {
                 dishNameText = mainName + method + vegName;
             }
@@ -263,7 +265,8 @@ function generateDishName(dish) {
             dishNameText = mainName + method + vegName;
     }
     
-    // ===== 特殊规则：如果主料是鸡蛋，辅料是西红柿，固定为"西红柿炒鸡蛋" =====
+    // ===== 特殊规则：经典菜名硬编码 =====
+    // 炒类：西红柿炒鸡蛋
     if (mainName === '鸡蛋' && vegName === '西红柿' && category === '炒类') {
         dishNameText = '西红柿炒鸡蛋';
     }
@@ -271,13 +274,11 @@ function generateDishName(dish) {
         dishNameText = '西红柿炒鸡蛋';
     }
     
-    // ===== 特殊规则：汤类经典名 =====
+    // 汤类：鲫鱼豆腐汤、西红柿鸡蛋汤
     if (category === '汤类') {
-        // 鲫鱼豆腐汤
         if ((mainName === '鲫鱼' && vegName === '豆腐') || (mainName === '豆腐' && vegName === '鲫鱼')) {
             dishNameText = '鲫鱼豆腐汤';
         }
-        // 西红柿鸡蛋汤
         if ((mainName === '西红柿' && vegName === '鸡蛋') || (mainName === '鸡蛋' && vegName === '西红柿')) {
             dishNameText = '西红柿鸡蛋汤';
         }
@@ -285,7 +286,6 @@ function generateDishName(dish) {
     
     // ===== 风味彩蛋：5%概率添加风味前缀 =====
     if (dish.isFlavor) {
-        // 从特殊食材中提取风味名称
         const flavorName = vegName;
         dishNameText = flavorName + '风味' + dishNameText;
     }
