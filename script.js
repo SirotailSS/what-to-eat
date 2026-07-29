@@ -334,10 +334,25 @@ function generateQR() {
 }
 
 // 显示二维码（替换占位符）
+// 显示二维码（替换占位符）
 function showQRCode() {
-    generateQR();
+    // 清空并重新生成二维码
+    qrElement.innerHTML = '';
+    new QRCode(qrElement, {
+        text: window.location.href,
+        width: 100,
+        height: 100,
+        colorDark: '#000000',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.H
+    });
+    
+    // 切换显示
     qrPlaceholder.style.display = 'none';
     qrWrapper.style.display = 'flex';
+    
+    // 强制回流，确保二维码完全渲染（无动画残留）
+    void qrWrapper.offsetHeight;
 }
 
 // 关闭分享浮层
