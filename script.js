@@ -330,6 +330,7 @@ function generateDishName(dish) {
 // ============================================
 
 const cookDisplay = document.getElementById('cookDisplay');
+
 const mainDisplay = document.getElementById('mainDisplay');
 const vegDisplay = document.getElementById('vegDisplay');
 const cookTip = document.getElementById('cookTip');
@@ -443,7 +444,7 @@ function generateQR() {
 function showQRCode() {
     qrElement.innerHTML = '';
     new QRCode(qrElement, {
-        text: window.location.href,
+        text: 'https://glowing-semolina-b3097d.netlify.app/',
         width: 100,
         height: 100,
         colorDark: '#000000',

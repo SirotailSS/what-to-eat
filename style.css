@@ -407,37 +407,225 @@ body {
     letter-spacing: 0.5px;
 }
 
-/* 移动端适配 */
+/* ============================================
+   响应式设计 - 移动端适配
+   ============================================ */
 @media (max-width: 768px) {
+    .container {
+        padding: 20px 15px;  /* 从 25px 减小到 20px */
+        border-radius: 25px;
+    }
+
+    .header {
+        margin-bottom: 15px;  /* 从 30px 减小到 15px */
+    }
+
+    .header h1 {
+        font-size: 26px;  /* 从 30px 减小到 26px */
+    }
+
+    .subtitle {
+        font-size: 14px;  /* 从 16px 减小到 14px */
+        margin-top: 4px;
+    }
+
+    .cards-container {
+        grid-template-columns: 1fr;
+        gap: 10px;  /* 从 12px 减小到 10px */
+        margin-bottom: 15px;  /* 从 25px 减小到 15px */
+    }
+
+    .card {
+        min-height: 70px;  /* 从 100px 减小到 70px */
+        padding: 10px 12px;  /* 从 15px 减小到 10px */
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .card-content {
+        font-size: 18px;  /* 从 22px 减小到 18px */
+        min-height: 24px;  /* 从 30px 减小到 24px */
+    }
+
+    .card-label {
+        font-size: 11px;  /* 从 12px 减小到 11px */
+        margin-bottom: 2px;
+        width: 100%;
+    }
+
+    .card-tip {
+        font-size: 10px;  /* 从 11px 减小到 10px */
+        width: 100%;
+    }
+
+    .dish-name {
+        font-size: 20px;  /* 从 24px 减小到 20px */
+        padding: 12px 15px;  /* 从 15px 减小到 12px */
+        min-height: 50px;  /* 从 60px 减小到 50px */
+        margin-bottom: 15px;  /* 从 25px 减小到 15px */
+    }
+
+    .btn-generate {
+        font-size: 18px;  /* 从 20px 减小到 18px */
+        padding: 12px 25px;  /* 从 15px 减小到 12px */
+        min-width: 120px;  /* 从 150px 减小到 120px */
+    }
+
+    .btn-reset {
+        font-size: 14px;  /* 从 16px 减小到 14px */
+        padding: 12px 18px;  /* 从 15px 减小到 12px */
+        min-width: 100px;  /* 从 120px 减小到 100px */
+    }
+
+    .btn-share {
+        font-size: 14px;  /* 从 16px 减小到 14px */
+        padding: 12px 18px;  /* 从 15px 减小到 12px */
+        min-width: 100px;  /* 从 120px 减小到 100px */
+    }
+
+    .button-area {
+        gap: 10px;  /* 从 15px 减小到 10px */
+        margin-bottom: 12px;  /* 从 20px 减小到 12px */
+    }
+
     .qr-section {
-        min-height: 60px;
-        padding: 12px;
-        margin: 15px 0 8px;
+        min-height: 50px;  /* 从 60px 减小到 50px */
+        padding: 10px;  /* 从 12px 减小到 10px */
+        margin: 10px 0 6px;  /* 从 15px 减小到 10px */
     }
     
     .qr-placeholder .qr-icon {
-        font-size: 22px;
+        font-size: 18px;  /* 从 22px 减小到 18px */
     }
     
     .qr-placeholder .qr-text {
-        font-size: 11px;
+        font-size: 10px;  /* 从 11px 减小到 10px */
     }
     
     .qr-wrapper #qrcode canvas {
-        width: 70px;
-        height: 70px;
+        width: 60px;  /* 从 70px 减小到 60px */
+        height: 60px;
+    }
+
+    .footer {
+        font-size: 12px;  /* 从 14px 减小到 12px */
+        margin-top: 6px;
     }
 }
 
 @media (max-width: 480px) {
-    .qr-section {
-        min-height: 50px;
-        padding: 10px;
-        margin: 12px 0 6px;
+    .container {
+        padding: 15px 12px;  /* 从 25px 减小到 15px */
+    }
+
+    .header h1 {
+        font-size: 22px;  /* 从 24px 减小到 22px */
+    }
+
+    .card-content {
+        font-size: 16px;  /* 从 18px 减小到 16px */
+    }
+
+    .dish-name {
+        font-size: 17px;  /* 从 20px 减小到 17px */
+        padding: 10px 12px;
+        min-height: 40px;
+    }
+
+    .btn-generate {
+        font-size: 16px;  /* 从 18px 减小到 16px */
+        padding: 10px 20px;
+        min-width: 100px;
+    }
+}
+
+/* ============================================
+   导航按钮区域
+   ============================================ */
+.nav-area {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    margin-bottom: 8px;
+}
+
+.btn-tools {
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    padding: 10px 22px;
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    flex: 1;
+    min-width: 120px;
+}
+
+.btn-tools:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+}
+
+.btn-coupon {
+    background: rgba(255, 200, 50, 0.2);
+    color: #fff;
+    border: 1px solid rgba(255, 200, 50, 0.3);
+    padding: 10px 22px;
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    flex: 1;
+    min-width: 120px;
+}
+
+.btn-coupon:hover {
+    background: rgba(255, 200, 50, 0.35);
+    transform: translateY(-2px);
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .nav-area {
+        gap: 8px;
+        margin-top: 6px;
+        margin-bottom: 4px;
     }
     
-    .qr-wrapper #qrcode canvas {
-        width: 60px;
-        height: 60px;
+    .btn-tools {
+        font-size: 13px;
+        padding: 8px 16px;
+        min-width: 100px;
+    }
+    
+    .btn-coupon {
+        font-size: 13px;
+        padding: 8px 16px;
+        min-width: 100px;
+    }
+}
+
+@media (max-width: 480px) {
+    .btn-tools {
+        font-size: 12px;
+        padding: 7px 14px;
+        min-width: 80px;
+    }
+    
+    .btn-coupon {
+        font-size: 12px;
+        padding: 7px 14px;
+        min-width: 80px;
     }
 }
