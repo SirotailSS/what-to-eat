@@ -47,6 +47,7 @@
 ---
 
 ## 📂 项目结构
+
 what-to-eat/
 ├── index.html # 主页面（含 HTML 骨架 + CDN 引用）
 ├── style.css # 全量样式（毛玻璃 + 响应式 + 动画）
